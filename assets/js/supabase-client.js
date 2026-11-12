@@ -1,9 +1,3 @@
-/**
- * FreeTools Pro — Supabase Auth & Cloud History Client
- * Mendukung autentikasi Supabase penuh dengan fallback localStorage otomatis.
- */
-
-// Ganti dengan URL dan Anon Key proyek Supabase Anda
 const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
 const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
@@ -41,19 +35,14 @@ function showAuthFeedback(message, isError = false) {
   }
 }
 
-/**
- * Memperbarui tampilan UI Navbar (index.html) & Sidebar (dashboard.html) berdasarkan status login
- */
 function updateAuthUI(user) {
   currentUser = user;
 
-  // 1. Update Navbar di index.html
   const navAuthLabel = document.getElementById('nav-auth-label');
   if (navAuthLabel) {
     navAuthLabel.textContent = user ? user.email.split('@')[0] : 'Masuk';
   }
 
-  // 2. Update Sidebar di dashboard.html
   const sidebarEmail = document.getElementById('sidebar-user-email');
   const sidebarStatus = document.getElementById('sidebar-sync-status');
   const avatarInitial = document.getElementById('user-avatar-initial');
@@ -83,9 +72,6 @@ function updateAuthUI(user) {
   }
 }
 
-/**
- * Inisialisasi Listener Form Login, Daftar & Logout
- */
 export async function initSupabaseAuth() {
   if (supabase) {
     const { data } = await supabase.auth.getSession();
@@ -113,7 +99,6 @@ export async function initSupabaseAuth() {
     }
   });
 
-  // Handle Sign In
   authForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!supabase) {
@@ -140,7 +125,6 @@ export async function initSupabaseAuth() {
     }
   });
 
-  // Handle Sign Up
   signupBtn?.addEventListener('click', async () => {
     if (!supabase) {
       showAuthFeedback(
@@ -166,15 +150,11 @@ export async function initSupabaseAuth() {
     }
   });
 
-  // Load riwayat saat drawer dibuka
   document.getElementById('open-history-btn')?.addEventListener('click', () => {
     renderHistoryDrawer();
   });
 }
 
-/**
- * Menyimpan item riwayat ke Supabase (jika login) atau localStorage
- */
 export async function saveToolHistory(toolName, title, content) {
   const entry = {
     id: crypto.randomUUID(),
@@ -211,9 +191,6 @@ export async function saveToolHistory(toolName, title, content) {
   return true;
 }
 
-/**
- * Mengambil dan merender daftar riwayat di dalam History Drawer
- */
 export async function renderHistoryDrawer() {
   const container = document.getElementById('history-list-container');
   if (!container) return;
@@ -300,8 +277,6 @@ export async function renderHistoryDrawer() {
     });
   });
 }
-
-// Auto-init jika dimuat langsung di index.html
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initSupabaseAuth);
 } else {
