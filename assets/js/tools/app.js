@@ -1,14 +1,9 @@
-/**
- * FreeTools Pro — Main Application Bootstrapper
- */
 import { initSupabaseAuth } from './supabase-client.js';
 import { initAIAdvisor } from './ai-integration.js';
 import { initSecurityTools } from './tools/security.js';
 import { initUtilityTools } from './tools/utilities.js';
 
-/**
- * Global Toast Notification Helper
- */
+
 window.showToast = function showToast(message, type = 'info') {
   const container = document.getElementById('toast-container');
   if (!container) return;
@@ -33,9 +28,7 @@ window.showToast = function showToast(message, type = 'info') {
   }, 2600);
 };
 
-/**
- * Global Copy-to-Clipboard Delegator untuk seluruh tombol `.copy-btn`
- */
+
 function initGlobalCopyButtons() {
   document.querySelectorAll('.copy-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -51,7 +44,7 @@ function initGlobalCopyButtons() {
   });
 }
 
-// Bootstrap Seluruh Modul Aplikasi
+
 document.addEventListener('DOMContentLoaded', () => {
   initGlobalCopyButtons();
   initSecurityTools();
