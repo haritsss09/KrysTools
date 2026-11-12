@@ -1,7 +1,9 @@
-const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+import { ENV } from './config.js';
 
-const LOCAL_HISTORY_KEY = 'freetools_pro_local_history';
+const SUPABASE_URL = ENV.SUPABASE_URL;
+const SUPABASE_ANON_KEY = ENV.SUPABASE_ANON_KEY;
+
+const LOCAL_HISTORY_KEY = 'KrysTools_local_history';
 const isConfigured =
   SUPABASE_URL.startsWith('https://') &&
   !SUPABASE_URL.includes('YOUR_PROJECT_ID') &&
