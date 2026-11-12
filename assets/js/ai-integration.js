@@ -1,7 +1,13 @@
 import { saveToolHistory } from './supabase-client.js';
-import { ENV } from './config.js';
 
-const GEMINI_API_KEY = ENV.GEMINI_API_KEY;
+let GEMINI_API_KEY = 'AQ.Ab8RN6LBCp7Mhtx0t9tQO1dnQK_CrmHaa4oCd0pyFKilB37pYw';
+try {
+  const cfg = await import('./config.js');
+  if (cfg.ENV?.GEMINI_API_KEY) GEMINI_API_KEY = cfg.ENV.GEMINI_API_KEY;
+} catch (e) {
+  // Menggunakan fallback key di atas
+}
+
 
 const SYSTEM_PROMPTS = {
   'security-audit':
