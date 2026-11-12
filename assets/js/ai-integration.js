@@ -1,7 +1,7 @@
 import { saveToolHistory } from './supabase-client.js';
+import { ENV } from './config.js';
 
-const GEMINI_API_KEY = 'AQ.Ab8RN6LBCp7Mhtx0t9tQO1dnQK_CrmHaa4oCd0pyFKilB37pYw';
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+const GEMINI_API_KEY = ENV.GEMINI_API_KEY;
 
 const SYSTEM_PROMPTS = {
   'security-audit':
