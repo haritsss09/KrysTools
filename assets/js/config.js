@@ -1,0 +1,5 @@
+export const ENV = {
+  SUPABASE_URL: 'https://ID_PROYEK_ANDA.supabase.co',
+  SUPABASE_ANON_KEY: 'EYJ_ANON_KEY_ANDA',
+  GEMINI_API_KEY: 'KUNCI_API_GEMINI_ANDA'
+};
