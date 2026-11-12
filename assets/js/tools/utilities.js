@@ -1,14 +1,3 @@
-/**
- * FreeTools Pro — Developer Utilities, Media & Calculators Module
- * 6. Code & Data Formatter (JSON, HTML, CSS)
- * 7. QR Code & Barcode Generator Studio
- * 8. Image Resizer & Compressor (HTML5 Canvas)
- * 9. Kalkulator Finansial & Akademik (IPK)
- */
-
-/* ==========================================================================
-   6. CODE & DATA FORMATTER / MINIFIER (JSON / HTML / CSS)
-   ========================================================================== */
 function initCodeFormatter() {
   const langSelect = document.getElementById('fmt-lang');
   const indentSelect = document.getElementById('fmt-indent');
