@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Platform utilitas digital, keamanan siber, konverter, generator, dan AI Security Advisor berbasis Web." />
+  <title>KrysTools — Security, Developer & Digital Utility Platform</title>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Prevent Dark Mode FOUC -->
+  <script>
+    if (
+      localStorage.getItem('theme') === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet (Akan dibuat pada Tahap 3) -->
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white transition-colors duration-200">
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-bold text-lg tracking-tight leading-none">KrysTools<span class="text-brand-600 dark:text-brand-400">.</span></span>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">Security & Dev Suite</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="#tools-hub" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Direktori Tools</a>
+          <a href="#ai-advisor" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
+            <span>AI Advisor</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">Gemini</span>
+          </a>
+          <a href="#architecture" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Arsitektur & Keamanan</a>
+        </nav>
+
+        <!-- Right Controls -->
+        <div class="flex items-center gap-2.5">
+          <!-- Theme Toggle -->
+          <button
+            id="theme-toggle"
+            type="button"
+            aria-label="Toggle Dark Mode"
+            class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+          >
+            <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+            <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
+          </button>
+
+          <!-- Auth Trigger (Supabase Ready) -->
+          <button
+            id="open-auth-btn"
+            type="button"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+          >
+            <i data-lucide="user" class="w-4 h-4 text-slate-500"></i>
+            <span id="nav-auth-label">Masuk</span>
+          </button>
+
+          <!-- Primary CTA -->
+          <a
+            href="dashboard.html"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 shadow-sm shadow-brand-600/20 transition-all"
+          >
+            <span>Buka Workspace</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+
+          <!-- Mobile Hamburger -->
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            aria-label="Buka Menu"
+            class="md:hidden p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300"
+          >
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-5 space-y-3">
+      <a href="#tools-hub" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200">Direktori Tools</a>
+      <a href="#ai-advisor" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200">AI Security Advisor (Gemini)</a>
+      <a href="#architecture" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200">Arsitektur & Cloud Sync</a>
+      <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
+        <button id="mobile-auth-btn" type="button" class="w-full py-2 px-3 rounded-lg text-sm font-medium border border-slate-200 dark:border-slate-800 text-center">
+          Masuk / Daftar Akun
+        </button>
+        <a href="dashboard.html" class="w-full py-2 px-3 rounded-lg text-sm font-semibold bg-brand-600 text-white text-center">
+          Buka Workspace Aplikasi
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="relative overflow-hidden pt-14 pb-20 lg:pt-20 lg:pb-24 border-b border-slate-200/70 dark:border-slate-800/70">
+    <!-- Subtle Background Glow -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 flex justify-center">
+      <div class="w-[46rem] h-[24rem] bg-gradient-to-tr from-brand-500/15 via-cyan-500/10 to-purple-500/15 blur-3xl rounded-full -translate-y-12"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <!-- Status Pill -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-600 dark:text-slate-300">Client-Side Web Crypto • Supabase Cloud Sync • Gemini AI Advisor</span>
+      </div>
+
+      <h1 class="max-w-4xl mx-auto text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
+        Semua Utilitas <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-cyan-500 dark:from-brand-400 dark:to-cyan-400">Keamanan & Developer</span> dalam Satu Hub.
+      </h1>
+
+      <p class="max-w-2xl mx-auto mt-5 text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+        Generasi password kriptografis, inspeksi token JWT, hashing, konversi data, hingga audit konfigurasi secara <em>real-time</em> dengan asisten AI cerdas tanpa meninggalkan browser Anda.
+      </p>
+
+      <!-- Hero Quick Search Bar -->
+      <div class="max-w-xl mx-auto mt-8">
+        <div class="relative flex items-center">
+          <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none"></i>
+          <input
+            id="hero-search-input"
+            type="text"
+            placeholder="Cari alat: JWT, SHA-256, JSON Formatter, QR Code, KPR..."
+            class="w-full pl-12 pr-24 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/40 dark:shadow-none text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all"
+          />
+          <a
+            href="#tools-hub"
+            class="absolute right-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 dark:bg-brand-600 text-white hover:opacity-90 transition-opacity"
+          >
+            Jelajahi
+          </a>
+        </div>
+
+        <!-- Popular Quick Tags -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs text-slate-500 dark:text-slate-400">
+          <span>Populer:</span>
+          <a href="dashboard.html?tool=password-gen" class="px-2.5 py-1 rounded-md bg-slate-200/70 dark:bg-slate-800/80 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Password Generator</a>
+          <a href="dashboard.html?tool=jwt-debugger" class="px-2.5 py-1 rounded-md bg-slate-200/70 dark:bg-slate-800/80 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">JWT Inspector</a>
+          <a href="dashboard.html?tool=code-formatter" class="px-2.5 py-1 rounded-md bg-slate-200/70 dark:bg-slate-800/80 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">JSON Beautifier</a>
+          <a href="dashboard.html?tool=ai-advisor" class="px-2.5 py-1 rounded-md bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60 font-medium">✨ AI Security Audit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TOOLS DIRECTORY HUB ==================== -->
+  <section id="tools-hub" class="py-16 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header & Category Filter -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">Direktori Utilitas Digital</h2>
+          <p class="mt-1.5 text-sm text-slate-600 dark:text-slate-400">Pilih alat untuk langsung membuka antarmuka kerja interaktif di Workspace.</p>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div id="category-filters" class="flex flex-wrap gap-2">
+          <button data-filter="all" class="filter-btn active px-3.5 py-2 rounded-xl text-xs font-semibold bg-brand-600 text-white shadow-sm transition-all">
+            Semua Tools (10)
+          </button>
+          <button data-filter="security" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all">
+            Security & Network
+          </button>
+          <button data-filter="utility" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all">
+            Dev & Formatters
+          </button>
+          <button data-filter="media" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all">
+            Media & Generator
+          </button>
+          <button data-filter="calculator" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all">
+            Kalkulator
+          </button>
+          <button data-filter="ai" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all">
+            AI Assistant
+          </button>
+        </div>
+      </div>
+
+      <!-- Tools Grid -->
+      <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <!-- 1. Password Generator -->
+        <a href="dashboard.html?tool=password-gen" data-category="security" data-keywords="password generator entropy passphrase security" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <i data-lucide="key-round" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Security</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Password & Passphrase Generator</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Buat kata sandi kriptografis berentropi tinggi menggunakan Web Crypto API dengan analisis kekuatan real-time.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Buka Generator</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 2. Hash Generator -->
+        <a href="dashboard.html?tool=hash-gen" data-category="security" data-keywords="hash md5 sha256 sha512 checksum integrity" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                <i data-lucide="fingerprint" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Security</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Hash Generator (MD5 & SHA-256)</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Hitung digest MD5, SHA-1, SHA-256, dan SHA-512 secara instan untuk verifikasi integritas teks maupun checksum.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Hitung Hash</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 3. Base64 & URL Encoder/Decoder -->
+        <a href="dashboard.html?tool=encoder-decoder" data-category="security" data-keywords="base64 url encode decode converter string" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+                <i data-lucide="binary" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Security</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Base64 & URL Encoder/Decoder</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Konversi dua arah teks UTF-8 ke Base64 aman atau encode parameter URI kompleks tanpa merusak karakter.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Konversi Data</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 4. JWT Debugger & Token Inspector -->
+        <a href="dashboard.html?tool=jwt-debugger" data-category="security" data-keywords="jwt json web token debugger inspector claims header payload" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Security</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">JWT Debugger & Token Inspector</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Decode Header, Payload, dan cek masa berlaku (exp/iat) JSON Web Token lengkap dengan deteksi celah algoritma.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Inspeksi Token</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 5. SSL / IP Lookup Simulator -->
+        <a href="dashboard.html?tool=network-lookup" data-category="security" data-keywords="ssl tls ip lookup dns network domain certificate" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                <i data-lucide="globe-lock" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Network</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">SSL/TLS & IP Lookup Analyzer</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Diagnostik informasi IP publik, geolokasi jaringan, DNS record, serta simulasi audit sertifikat SSL/TLS domain.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Cek Jaringan</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 6. Text & Code Formatter -->
+        <a href="dashboard.html?tool=code-formatter" data-category="utility" data-keywords="json html css formatter beautifier minifier code" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <i data-lucide="braces" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Dev Tools</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Code & Data Formatter (JSON/HTML/CSS)</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Rapikan (beautify), validasi sintaks, atau kompres (minify) payload JSON, markup HTML, dan stylesheet CSS.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Format Kode</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 7. QR Code & Barcode Generator -->
+        <a href="dashboard.html?tool=qr-barcode" data-category="media" data-keywords="qr code barcode generator png svg link wifi" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                <i data-lucide="qr-code" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Generator</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">QR Code & Barcode Studio</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Hasilkan QR Code kustom (URL, teks, Wi-Fi) dan Barcode Code-128 resolusi tinggi siap unduh dalam format PNG.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Buat Kode</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 8. Image Resizer & Compressor -->
+        <a href="dashboard.html?tool=image-optimizer" data-category="media" data-keywords="image resizer compressor webp jpeg png optimizer" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                <i data-lucide="image-down" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Media</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Image Resizer & Compressor</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Ubah dimensi piksel, kompres ukuran file, dan konversi format gambar (WEBP/JPEG/PNG) langsung di browser.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Optimasi Gambar</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 9. Kalkulator Finansial & Akademik -->
+        <a href="dashboard.html?tool=smart-calculator" data-category="calculator" data-keywords="kalkulator finansial akademik ipk gpa kpr bunga investasi" class="tool-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center">
+                <i data-lucide="calculator" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Calculator</span>
+            </div>
+            <h3 class="text-base font-bold group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Kalkulator Finansial & Akademik</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Simulasi bunga majemuk, cicilan pinjaman/KPR, hingga perhitungan indeks prestasi kumulatif (IPK/GPA) akurat.</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+            <span>Mulai Hitung</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- 10. AI Smart Assistant / Security Advisor -->
+        <a href="dashboard.html?tool=ai-advisor" data-category="ai" data-keywords="ai gemini assistant security advisor audit code vulnerability" class="tool-card group p-6 rounded-2xl bg-gradient-to-br from-brand-600 to-indigo-700 text-white shadow-lg shadow-brand-600/20 hover:shadow-xl hover:scale-[1.01] transition-all flex flex-col justify-between sm:col-span-2 lg:col-span-3">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="space-y-2 max-w-2xl">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/15 backdrop-blur-sm">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Powered by Google Gemini AI</span>
+              </div>
+              <h3 class="text-xl font-bold">AI Smart Assistant & Security Advisor</h3>
+              <p class="text-sm text-indigo-100 leading-relaxed">
+                Tempel potongan kode, header HTTP, payload JWT, atau konfigurasi server Anda. Gemini AI akan menganalisis kerentanan keamanan, memberikan rekomendasi perbaikan, dan menjelaskan logika secara <em>real-time</em>.
+              </p>
+            </div>
+            <div class="shrink-0">
+              <span class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-brand-700 font-semibold text-sm shadow-sm group-hover:bg-indigo-50 transition-colors">
+                <span>Konsultasi dengan AI</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Empty Search State -->
+      <div id="empty-search-state" class="hidden text-center py-12">
+        <p class="text-slate-500 dark:text-slate-400 text-sm">Tidak ada utilitas yang cocok dengan kata kunci pencarian Anda.</p>
+        <button id="reset-filter-btn" type="button" class="mt-3 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline">
+          Tampilkan Semua Utilitas
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== AI ADVISOR PREVIEW & ARCHITECTURE ==================== -->
+  <section id="ai-advisor" class="py-16 bg-white dark:bg-slate-900/50 border-y border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <!-- Left Copy -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            <i data-lucide="cpu" class="w-4 h-4"></i>
+            <span>Intelligent Security Auditing</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">Audit Keamanan & Kode Secara Instan</h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+            Tidak sekadar konverter statis. Terintegrasi langsung dengan <strong>Gemini API</strong> dan penyimpanan riwayat terenkripsi via <strong>Supabase</strong>, setiap sesi kerja Anda tersimpan rapi dan dapat diaudit kapan saja.
+          </p>
+          <ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+            <li class="flex items-start gap-2.5">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span>Deteksi celah XSS, SQLi, dan mis-konfigurasi CORS/CSP secara otomatis.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span>Sinkronisasi riwayat hasil generate & audit ke akun Supabase Anda.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span>Zero-server-latency untuk operasi kriptografi dasar (Web Crypto API).</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right Interactive Mock Terminal -->
+        <div class="lg:col-span-7">
+          <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden text-slate-200 font-mono text-xs">
+            <div class="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="ml-2 text-slate-400">gemini-security-advisor — live-audit</span>
+              </div>
+              <span class="text-[11px] text-emerald-400">● Connected</span>
+            </div>
+            <div class="p-5 space-y-4 leading-relaxed">
+              <div>
+                <span class="text-slate-500">// Input JWT Header & Payload</span>
+                <p class="text-cyan-400 mt-1">{ "alg": "none", "typ": "JWT" } . { "sub": "admin_01", "role": "superuser" }</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-900/90 border border-brand-500/30 space-y-2">
+                <div class="flex items-center gap-2 text-brand-400 font-semibold">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  <span>Gemini AI Security Analysis:</span>
+                </div>
+                <p class="text-slate-300">
+                  <span class="text-rose-400 font-semibold">[CRITICAL]</span> Algoritma <code class="text-amber-300">"alg": "none"</code> terdeteksi. Token ini rentan terhadap pemalsuan tanda tangan (Signature Bypass). Segera migrasikan ke <code class="text-emerald-400">RS256</code> atau <code class="text-emerald-400">ES256</code> dan validasi klaim <code class="text-amber-300">exp</code> di sisi server.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ARCHITECTURE HIGHLIGHTS ==================== -->
+  <section id="architecture" class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+          <i data-lucide="lock" class="w-6 h-6 text-brand-600 dark:text-brand-400 mb-3"></i>
+          <h3 class="font-bold text-base">Client-Side Privacy First</h3>
+          <p class="mt-1.5 text-sm text-slate-600 dark:text-slate-400">Operasi sensitif seperti pembuatan password dan hashing berjalan lokal di memori browser menggunakan standar Web Crypto.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+          <i data-lucide="database" class="w-6 h-6 text-emerald-600 dark:text-emerald-400 mb-3"></i>
+          <h3 class="font-bold text-base">Supabase Cloud History</h3>
+          <p class="mt-1.5 text-sm text-slate-600 dark:text-slate-400">Masuk dengan akun Anda untuk menyimpan riwayat aktivitas alat, snippet JSON, dan laporan audit AI secara lintas perangkat.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+          <i data-lucide="zap" class="w-6 h-6 text-amber-500 mb-3"></i>
+          <h3 class="font-bold text-base">Arsitektur ES6 Modular</h3>
+          <p class="mt-1.5 text-sm text-slate-600 dark:text-slate-400">Dibangun tanpa overhead framework berat untuk waktu muat instan di perangkat mobile, tablet, maupun desktop.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-10 bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800 dark:text-slate-200">KrysTools.</span>
+        <span>•</span>
+        <span>All-in-One Security & Digital Utility Platform</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="dashboard.html" class="hover:text-brand-600 dark:hover:text-brand-400">Workspace</a>
+        <a href="#tools-hub" class="hover:text-brand-600 dark:hover:text-brand-400">Tools Hub</a>
+        <a href="#ai-advisor" class="hover:text-brand-600 dark:hover:text-brand-400">Gemini AI</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== SUPABASE AUTH MODAL (READY FOR TAHAP 4) ==================== -->
+  <div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl relative">
+      <button id="close-auth-btn" type="button" aria-label="Tutup Modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-5">
+        <h3 class="text-lg font-bold">Sinkronisasi Cloud Supabase</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Masuk untuk menyimpan riwayat penggunaan tools dan hasil audit AI Anda.</p>
+      </div>
+
+      <form id="auth-form" class="space-y-4">
+        <div>
+          <label for="auth-email" class="block text-xs font-medium mb-1">Alamat Email</label>
+          <input id="auth-email" type="email" required placeholder="developer@domain.com" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500" />
+        </div>
+        <div>
+          <label for="auth-password" class="block text-xs font-medium mb-1">Kata Sandi</label>
+          <input id="auth-password" type="password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500" />
+        </div>
+        <div id="auth-feedback" class="hidden text-xs p-2.5 rounded-lg"></div>
+        <div class="flex gap-2.5 pt-1">
+          <button type="submit" data-action="signin" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white transition-colors">
+            Masuk
+          </button>
+          <button type="button" id="auth-signup-btn" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            Daftar Baru
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== CORE LANDING INTERACTIVITY ==================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize Lucide Icons
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // 2. Dark / Light Mode Toggle
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      themeToggleBtn?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      });
+
+      // 3. Mobile Navigation Drawer
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenuBtn?.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      // 4. Live Category Filter & Search on Tools Hub
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const toolCards = document.querySelectorAll('.tool-card');
+      const searchInput = document.getElementById('hero-search-input');
+      const emptyState = document.getElementById('empty-search-state');
+      const resetFilterBtn = document.getElementById('reset-filter-btn');
+
+      let activeCategory = 'all';
+      let searchQuery = '';
+
+      function applyFilters() {
+        let visibleCount = 0;
+
+        toolCards.forEach((card) => {
+          const category = card.getAttribute('data-category');
+          const keywords = (card.getAttribute('data-keywords') + ' ' + card.textContent).toLowerCase();
+
+          const matchesCategory = activeCategory === 'all' || category === activeCategory;
+          const matchesSearch = searchQuery === '' || keywords.includes(searchQuery);
+
+          if (matchesCategory && matchesSearch) {
+            card.classList.remove('hidden');
+            visibleCount++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (visibleCount === 0) {
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+        }
+      }
+
+      filterBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.getAttribute('data-filter');
+
+          filterBtns.forEach((b) => {
+            b.classList.remove('bg-brand-600', 'text-white', 'shadow-sm', 'font-semibold');
+            b.classList.add('bg-white', 'dark:bg-slate-900', 'border', 'border-slate-200', 'dark:border-slate-800', 'text-slate-600', 'dark:text-slate-300', 'font-medium');
+          });
+
+          btn.classList.remove('bg-white', 'dark:bg-slate-900', 'border', 'border-slate-200', 'dark:border-slate-800', 'text-slate-600', 'dark:text-slate-300', 'font-medium');
+          btn.classList.add('bg-brand-600', 'text-white', 'shadow-sm', 'font-semibold');
+
+          applyFilters();
+        });
+      });
+
+      searchInput?.addEventListener('input', (e) => {
+        searchQuery = e.target.value.trim().toLowerCase();
+        applyFilters();
+      });
+
+      resetFilterBtn?.addEventListener('click', () => {
+        activeCategory = 'all';
+        searchQuery = '';
+        if (searchInput) searchInput.value = '';
+        filterBtns[0]?.click();
+      });
+
+      // 5. Auth Modal Controls (Hooks for Tahap 4 Supabase Integration)
+      const authModal = document.getElementById('auth-modal');
+      const openAuthBtns = [document.getElementById('open-auth-btn'), document.getElementById('mobile-auth-btn')];
+      const closeAuthBtn = document.getElementById('close-auth-btn');
+
+      openAuthBtns.forEach((btn) => {
+        btn?.addEventListener('click', () => {
+          authModal.classList.remove('hidden');
+          authModal.classList.add('flex');
+        });
+      });
+
+      closeAuthBtn?.addEventListener('click', () => {
+        authModal.classList.add('hidden');
+        authModal.classList.remove('flex');
+      });
+
+      authModal?.addEventListener('click', (e) => {
+        if (e.target === authModal) {
+          authModal.classList.add('hidden');
+          authModal.classList.remove('flex');
+        }
+      });
+    });
+  </script>
+
+  <!-- Supabase SDK & Modular Client (Akan diaktifkan pada Tahap 4) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="./assets/js/supabase-client.js"></script>
+</body>
+</html>
