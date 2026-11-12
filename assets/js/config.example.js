@@ -1,0 +1,5 @@
+export const ENV = {
+  SUPABASE_URL: 'https://YOUR_PROJECT_ID.supabase.co',
+  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY',
+  GEMINI_API_KEY: 'YOUR_GEMINI_API_KEY'
+};
