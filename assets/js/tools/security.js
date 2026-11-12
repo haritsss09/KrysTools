@@ -1,16 +1,4 @@
-/**
- * FreeTools Pro — Security & Network Tools Module
- * 1. Password Generator (Web Crypto API)
- * 2. Hash Generator (MD5, SHA-1, SHA-256, SHA-512)
- * 3. Base64 & URL Encoder/Decoder (UTF-8 Safe)
- * 4. JWT Debugger & Security Inspector
- * 5. SSL/TLS & IP/DNS Network Analyzer
- */
 import { saveToolHistory } from '../supabase-client.js';
-
-/* ==========================================================================
-   1. CRYPTOGRAPHIC PASSWORD GENERATOR
-   ========================================================================== */
 function initPasswordGenerator() {
   const outputEl = document.getElementById('pw-output');
   const lengthInput = document.getElementById('pw-length');
@@ -104,13 +92,10 @@ function initPasswordGenerator() {
     );
   });
 
-  // Generate password awal saat halaman dibuka
+ 
   generatePassword();
 }
 
-/* ==========================================================================
-   2. HASH GENERATOR (MD5, SHA-1, SHA-256, SHA-512)
-   ========================================================================== */
 function md5(string) {
   function rotateLeft(lValue, iShiftBits) {
     return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
@@ -314,9 +299,6 @@ function initHashGenerator() {
   });
 }
 
-/* ==========================================================================
-   3. BASE64 & URL ENCODER / DECODER
-   ========================================================================== */
 function initEncoderDecoder() {
   const modeBtns = document.querySelectorAll('.enc-mode-btn');
   const inputEl = document.getElementById('enc-input');
@@ -382,9 +364,6 @@ function initEncoderDecoder() {
   });
 }
 
-/* ==========================================================================
-   4. JWT DEBUGGER & SECURITY INSPECTOR
-   ========================================================================== */
 function initJWTDebugger() {
   const inputEl = document.getElementById('jwt-input');
   const sampleBtn = document.getElementById('jwt-sample-btn');
@@ -474,9 +453,6 @@ function initJWTDebugger() {
   });
 }
 
-/* ==========================================================================
-   5. SSL / TLS & IP / DNS NETWORK ANALYZER
-   ========================================================================== */
 function initNetworkLookup() {
   const targetInput = document.getElementById('net-target-input');
   const scanBtn = document.getElementById('net-scan-btn');
@@ -515,7 +491,6 @@ function initNetworkLookup() {
     }
   });
 
-  // Analisis Domain / Target menggunakan Google DNS-over-HTTPS
   scanBtn?.addEventListener('click', async () => {
     const rawTarget = targetInput.value.trim().replace(/^https?:\/\//, '').split('/')[0];
     if (!rawTarget) {
