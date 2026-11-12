@@ -1,6 +1,3 @@
-/**
- * FreeTools Pro — Google Gemini AI Security Advisor & Smart Assistant
- */
 import { saveToolHistory } from './supabase-client.js';
 
 const GEMINI_API_KEY = 'AQ.Ab8RN6LBCp7Mhtx0t9tQO1dnQK_CrmHaa4oCd0pyFKilB37pYw';
@@ -19,9 +16,7 @@ const SYSTEM_PROMPTS = {
 
 let lastMarkdownReport = '';
 
-/**
- * Mengirim permintaan ke Google Gemini REST API dengan fallback model otomatis
- */
+
 async function callGeminiAPI(prompt, mode) {
   const systemInstruction = SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS['security-audit'];
   let lastError = null;
@@ -71,9 +66,7 @@ async function callGeminiAPI(prompt, mode) {
   throw new Error(lastError || 'Gagal menghubungi layanan Gemini AI.');
 }
 
-/**
- * Inisialisasi antarmuka AI Security Advisor di dashboard.html
- */
+
 export function initAIAdvisor() {
   const contextSelect = document.getElementById('ai-context-type');
   const promptInput = document.getElementById('ai-prompt-input');
@@ -87,7 +80,7 @@ export function initAIAdvisor() {
 
   if (!submitBtn || !promptInput) return;
 
-  // Quick Prompt Presets
+  
   document.querySelectorAll('.ai-preset-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const preset = btn.getAttribute('data-preset');
@@ -96,7 +89,7 @@ export function initAIAdvisor() {
     });
   });
 
-  // Clear Prompt & Output
+  
   clearBtn?.addEventListener('click', () => {
     promptInput.value = '';
     responseWrapper.classList.add('hidden');
@@ -111,14 +104,14 @@ export function initAIAdvisor() {
     window.showToast?.('Laporan analisis AI berhasil disalin!', 'success');
   });
 
-  // Save AI Report to Supabase / Local History
+  
   saveBtn?.addEventListener('click', async () => {
     if (!lastMarkdownReport) return;
     const modeLabel = contextSelect.options[contextSelect.selectedIndex]?.text || 'AI Audit';
     await saveToolHistory('AI Advisor', modeLabel, lastMarkdownReport);
   });
 
-  // Submit Analysis
+ 
   submitBtn.addEventListener('click', async () => {
     const prompt = promptInput.value.trim();
     if (!prompt) {
@@ -129,7 +122,7 @@ export function initAIAdvisor() {
 
     const mode = contextSelect.value;
 
-    // UI Loading State
+   
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
     loadingBox.classList.remove('hidden');
@@ -140,7 +133,7 @@ export function initAIAdvisor() {
       const markdownText = await callGeminiAPI(prompt, mode);
       lastMarkdownReport = markdownText;
 
-      // Render Markdown menggunakan marked.js
+  
       if (window.marked) {
         responseOutput.innerHTML = window.marked.parse(markdownText);
       } else {
