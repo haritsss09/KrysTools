@@ -1,7 +1,14 @@
-import { ENV } from './config.js';
+importlet ENV = { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' };
+try {
+  const cfg = await import('./config.js');
+  ENV = cfg.ENV;
+} catch (e) {
+  console.warn('config.js tidak ditemukan, menggunakan mode lokal.');
+}
 
-const SUPABASE_URL = ENV.SUPABASE_URL;
-const SUPABASE_ANON_KEY = ENV.SUPABASE_ANON_KEY;
+const SUPABASE_URL = ENV.SUPABASE_URL || 'https://placeholder.supabase.co';
+const SUPABASE_ANON_KEY = ENV.SUPABASE_ANON_KEY || 'placeholder_key';
+
 
 const LOCAL_HISTORY_KEY = 'KrysTools_local_history';
 const isConfigured =
