@@ -878,24 +878,98 @@
       const sidebar = document.getElementById('sidebar');
       const backdrop = document.getElementById('sidebar-backdrop');
       function openMobileSidebar() {
-        sidebar.classList.remove('-translate-x-full');
-        backdrop.classList.remove('hidden');
+        sidebar.classList.remove('-t  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+
+      // Deklarasi sidebar ditaruh di paling atas agar tidak error Temporal Dead Zone
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      
+      function openMobileSidebar() {
+        sidebar?.classList.remove('-translate-x-full');
+        backdrop?.classList.remove('hidden');
       }
       function closeMobileSidebar() {
-        sidebar.classList.add('-translate-x-full');
-        backdrop.classList.add('hidden');
+        sidebar?.classList.add('-translate-x-full');
+        backdrop?.classList.add('hidden');
       }
+
       document.getElementById('open-sidebar-btn')?.addEventListener('click', openMobileSidebar);
       document.getElementById('close-sidebar-btn')?.addEventListener('click', closeMobileSidebar);
       backdrop?.addEventListener('click', closeMobileSidebar);
 
-      // Dark Mode Toggle
+      const TOOL_META = {
+        'ai-advisor': { title: 'AI Smart Assistant & Security Advisor', category: 'AI Intelligence' },
+        'password-gen': { title: 'Password & Passphrase Generator', category: 'Security & Network' },
+        'hash-gen': { title: 'Cryptographic Hash Generator', category: 'Security & Network' },
+        'encoder-decoder': { title: 'Base64 & URL Encoder / Decoder', category: 'Security & Network' },
+        'jwt-debugger': { title: 'JWT Debugger & Token Inspector', category: 'Security & Network' },
+        'network-lookup': { title: 'SSL/TLS & IP Network Analyzer', category: 'Security & Network' },
+        'code-formatter': { title: 'Code & Data Formatter (JSON/HTML/CSS)', category: 'Developer & Utilities' },
+        'qr-barcode': { title: 'QR Code & Barcode Studio', category: 'Developer & Utilities' },
+        'image-optimizer': { title: 'Image Resizer & Compressor', category: 'Developer & Utilities' },
+        'smart-calculator': { title: 'Kalkulator Finansial & Akademik', category: 'Developer & Utilities' }
+      };
+
+      const navBtns = document.querySelectorAll('.tool-nav-btn');
+      const panels = document.querySelectorAll('.tool-panel');
+      const headerTitle = document.getElementById('header-tool-title');
+      const headerCategory = document.getElementById('header-category-label');
+
+      function switchTool(toolId, updateUrl = true) {
+        const targetId = TOOL_META[toolId] ? toolId : 'password-gen';
+        panels.forEach((p) => p.classList.add('hidden'));
+        const activePanel = document.getElementById(`tool-${targetId}`);
+        if (activePanel) activePanel.classList.remove('hidden');
+
+        navBtns.forEach((btn) => {
+          const isTarget = btn.getAttribute('data-tool') === targetId;
+          if (targetId === 'ai-advisor' && isTarget) return;
+          if (isTarget) {
+            btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-brand-600', 'dark:text-brand-400', 'font-semibold');
+            btn.classList.remove('text-slate-600', 'dark:text-slate-300', 'font-medium');
+          } else if (btn.getAttribute('data-tool') !== 'ai-advisor') {
+            btn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-brand-600', 'dark:text-brand-400', 'font-semibold');
+            btn.classList.add('text-slate-600', 'dark:text-slate-300', 'font-medium');
+          }
+        });
+
+        headerTitle.textContent = TOOL_META[targetId].title;
+        headerCategory.textContent = TOOL_META[targetId].category;
+
+        if (updateUrl) {
+          const url = new URL(window.location);
+          url.searchParams.set('tool', targetId);
+          window.history.replaceState({}, '', url);
+        }
+
+        closeMobileSidebar();
+      }
+
+      navBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          switchTool(btn.getAttribute('data-tool'));
+        });
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      switchTool(params.get('tool') || 'password-gen', false);
+
+      const sidebarFilter = document.getElementById('sidebar-filter');
+      sidebarFilter?.addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        navBtns.forEach((btn) => {
+          const match = btn.textContent.toLowerCase().includes(q);
+          btn.classList.toggle('hidden', !match);
+        });
+      });
+
       document.getElementById('theme-toggle')?.addEventListener('click', () => {
         const isDark = document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
       });
 
-      // History Drawer & Auth Modal Toggles
       const historyDrawer = document.getElementById('history-drawer');
       document.getElementById('open-history-btn')?.addEventListener('click', () => {
         historyDrawer.classList.remove('hidden');
@@ -916,17 +990,15 @@
         authModal.classList.remove('flex');
       });
 
-      // Quick Bridge: Send JWT to Gemini AI Advisor
       document.getElementById('jwt-audit-ai-btn')?.addEventListener('click', () => {
         const token = document.getElementById('jwt-input').value.trim();
         const header = document.getElementById('jwt-header-output').textContent;
         const payload = document.getElementById('jwt-payload-output').textContent;
         const promptBox = document.getElementById('ai-prompt-input');
-        promptBox.value = `Audit keamanan JSON Web Token (JWT) berikut. Periksa algoritma header, masa berlaku klaim, dan potensi kerentanan konfigurasi:\n\nHeader:\n${header}\n\nPayload:\n${payload}\n\nRaw Token:\n${token || '(kosong)'}`;
+        promptBox.value = `Audit keamanan JSON Web Token (JWT) berikut:\n\nHeader:\n${header}\n\nPayload:\n${payload}\n\nToken:\n${token}`;
         switchTool('ai-advisor');
       });
 
-      // Expose global switchTool helper for modular scripts
       window.FreeToolsUI = { switchTool };
     });
   </script>
