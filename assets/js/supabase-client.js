@@ -1,4 +1,4 @@
-importlet ENV = { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' };
+let ENV = { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' };
 try {
   const cfg = await import('./config.js');
   ENV = cfg.ENV;
