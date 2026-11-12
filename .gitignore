@@ -1,0 +1,29 @@
+# File Konfigurasi Kunci API & Kredensial Lokal
+assets/js/config.js
+config.js
+secrets.js
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Supabase CLI & Local Temp Files
+supabase/.temp/
+supabase/.branches/
+.supabase/
+
+# Dependencies & Build Output (jika menggunakan npm/bundler)
+node_modules/
+dist/
+build/
+
+# File Sistem Operasi & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
