@@ -874,18 +874,14 @@
         });
       });
 
-      // Mobile Sidebar Drawer
-      const sidebar = document.getElementById('sidebar');
-      const backdrop = document.getElementById('sidebar-backdrop');
-      function openMobileSidebar() {
-        sidebar.classList.remove('-t  <script>
+     <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
 
-      // Deklarasi sidebar ditaruh di paling atas agar tidak error Temporal Dead Zone
+      // 1. Deklarasi sidebar di paling atas agar tidak ReferenceError
       const sidebar = document.getElementById('sidebar');
       const backdrop = document.getElementById('sidebar-backdrop');
-      
+
       function openMobileSidebar() {
         sidebar?.classList.remove('-translate-x-full');
         backdrop?.classList.remove('hidden');
@@ -899,6 +895,7 @@
       document.getElementById('close-sidebar-btn')?.addEventListener('click', closeMobileSidebar);
       backdrop?.addEventListener('click', closeMobileSidebar);
 
+      // 2. Navigasi & Switcher Tools
       const TOOL_META = {
         'ai-advisor': { title: 'AI Smart Assistant & Security Advisor', category: 'AI Intelligence' },
         'password-gen': { title: 'Password & Passphrase Generator', category: 'Security & Network' },
@@ -920,8 +917,7 @@
       function switchTool(toolId, updateUrl = true) {
         const targetId = TOOL_META[toolId] ? toolId : 'password-gen';
         panels.forEach((p) => p.classList.add('hidden'));
-        const activePanel = document.getElementById(`tool-${targetId}`);
-        if (activePanel) activePanel.classList.remove('hidden');
+        document.getElementById(`tool-${targetId}`)?.classList.remove('hidden');
 
         navBtns.forEach((btn) => {
           const isTarget = btn.getAttribute('data-tool') === targetId;
@@ -943,26 +939,16 @@
           url.searchParams.set('tool', targetId);
           window.history.replaceState({}, '', url);
         }
-
         closeMobileSidebar();
       }
 
-      navBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          switchTool(btn.getAttribute('data-tool'));
-        });
-      });
-
+      navBtns.forEach((btn) => btn.addEventListener('click', () => switchTool(btn.getAttribute('data-tool'))));
       const params = new URLSearchParams(window.location.search);
       switchTool(params.get('tool') || 'password-gen', false);
 
-      const sidebarFilter = document.getElementById('sidebar-filter');
-      sidebarFilter?.addEventListener('input', (e) => {
+      document.getElementById('sidebar-filter')?.addEventListener('input', (e) => {
         const q = e.target.value.trim().toLowerCase();
-        navBtns.forEach((btn) => {
-          const match = btn.textContent.toLowerCase().includes(q);
-          btn.classList.toggle('hidden', !match);
-        });
+        navBtns.forEach((btn) => btn.classList.toggle('hidden', !btn.textContent.toLowerCase().includes(q)));
       });
 
       document.getElementById('theme-toggle')?.addEventListener('click', () => {
@@ -990,19 +976,20 @@
         authModal.classList.remove('flex');
       });
 
+      // 3. Perbaikan SyntaxError baris 881 (menggunakan \n dalam satu baris)
       document.getElementById('jwt-audit-ai-btn')?.addEventListener('click', () => {
         const token = document.getElementById('jwt-input').value.trim();
         const header = document.getElementById('jwt-header-output').textContent;
         const payload = document.getElementById('jwt-payload-output').textContent;
         const promptBox = document.getElementById('ai-prompt-input');
-        promptBox.value = `Audit keamanan JSON Web Token (JWT) berikut:\n\nHeader:\n${header}\n\nPayload:\n${payload}\n\nToken:\n${token}`;
+        promptBox.value = 'Audit keamanan JSON Web Token (JWT) berikut:\n\nHeader:\n' + header + '\n\nPayload:\n' + payload + '\n\nToken:\n' + token;
         switchTool('ai-advisor');
       });
 
       window.FreeToolsUI = { switchTool };
     });
   </script>
-
+  
   <!-- Supabase SDK & Modular Application Scripts (Akan dibuat pada Tahap 4) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module" src="./assets/js/app.js"></script>
